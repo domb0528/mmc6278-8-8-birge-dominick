@@ -1,0 +1,35 @@
+
+> mongo_blog@1.0.0 test
+> npm run test:setup && npm run test:run
+
+
+> mongo_blog@1.0.0 test:setup
+> export NODE_ENV=test && npm run mongo
+
+
+> mongo_blog@1.0.0 mongo
+> npm run mongo:restart && node test/db_check.js && npm run seed
+
+
+> mongo_blog@1.0.0 mongo:restart
+> npm run mongo:stop; npm run mongo:start
+
+
+> mongo_blog@1.0.0 mongo:stop
+> docker container stop mongo-sandbox
+
+mongo-sandbox
+
+> mongo_blog@1.0.0 mongo:start
+> export DB_NAME=mongo_blog && docker run --rm -d -p 27017:27017 --name=mongo-sandbox -e MONGO_INITDB_DATABASE=$DB_NAME mongo:5
+
+2b8905ae20ce4f889e5820c44fac8d98d2eab87ac2e5d22a7d9b9d44da92273c
+WAITING FOR MONGO TO START
+WAITING 1 SEC
+
+> mongo_blog@1.0.0 seed
+> node seed/seed.js
+
+[33mSEEDING MONGODB LOCAL DB[0m
+[35mUsing Test Username/Password
+[0m
