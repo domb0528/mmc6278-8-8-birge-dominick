@@ -9,6 +9,31 @@ const PostSchema = new Schema({
 // Create a "tags" property that is an array of objects
 // with type SchemaTypes.ObjectId and ref 'Tag'
 // Create a "slug" property with type String
+title: {
+  type: String,
+  required: true,
+  unique: true
+},
+body: {
+  type: String,
+  required: true
+},
+createdAt: {
+  type: Date,
+  createdAt: Date.now
+},
+slug: {
+  type: String,
+},
+comments: [CommentSchema],
+tags: [
+  {
+    type: Schema.Types.ObjectId,
+    ref: 'Tag'
+  }
+]
+
+
 })
 
 // Turns the first five words of the title and lowercases them

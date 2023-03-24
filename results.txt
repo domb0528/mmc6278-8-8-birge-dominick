@@ -23,7 +23,7 @@ mongo-sandbox
 > mongo_blog@1.0.0 mongo:start
 > export DB_NAME=mongo_blog && docker run --rm -d -p 27017:27017 --name=mongo-sandbox -e MONGO_INITDB_DATABASE=$DB_NAME mongo:5
 
-2b8905ae20ce4f889e5820c44fac8d98d2eab87ac2e5d22a7d9b9d44da92273c
+90d604994ab3e6c167024911835c1d12d9f666c296e66b2b4770eeea3bd7009c
 WAITING FOR MONGO TO START
 WAITING 1 SEC
 
@@ -33,3 +33,215 @@ WAITING 1 SEC
 [33mSEEDING MONGODB LOCAL DB[0m
 [35mUsing Test Username/Password
 [0m
+
+> mongo_blog@1.0.0 test:run
+> mocha **/test.js --exit $WATCH
+
+
+
+  Mongo Blog
+    Static Files
+      ✔ should serve CSS
+    HTML Routes
+      Unauthenticated
+        GET / - index page showing all posts
+          ✔ should NOT render new post and logout links (92ms)
+          ✔ should render all post titles as links to post
+          ✔ should render dates of posts, format: Thu, Oct 26, 2000
+        GET /?tag={tag} - index page showing all posts by tag
+          ✔ should render with non-existent tag
+          ✔ should render only posts of tag: guides
+          ✔ should NOT render new post and logout links
+          ✔ should render only posts of tag: musings
+          ✔ should NOT render new post and logout links
+        GET /post/:slug - view post
+          1) should render all posts by slug
+          2) should render all post pages WITHOUT new post and logout links
+          3) should render all post comments
+          4) should render all post comments' author and date, format: 01/01/2000
+        GET /admin - redirect route
+          ✔ should redirect to login page
+        GET /admin/login - login page
+          ✔ should render HTML
+        GET /admin/create-post - new post page
+          ✔ should redirect to login page
+        GET /admin/edit-post/:slug - edit post page
+          ✔ should redirect to login page
+      Authenticated
+        GET / - index page
+          ✔ should render new post and logout links
+          ✔ should show edit and delete options for each post
+        GET /?tag={tag} - index page showing all posts by tag
+          ✔ should render new post and logout links
+          ✔ should show edit and delete options for each post
+        GET /post/:slug - view post
+          5) should render all post pages with new post and logout links
+          6) should render all post comments with remove option
+        GET /admin - redirect route
+          ✔ should redirect to index page
+        GET /admin/login - login page
+          ✔ should redirect to index page
+        GET /admin/create-post - new post page
+          ✔ should render create post page
+        GET /admin/edit-post/:slug - edit post page
+          ✔ should render edit post page for each post with pre-filled title (85ms)
+          ✔ should render edit post page for each post with pre-filled body (72ms)
+          ✔ should render edit post page for each post with pre-filled tags (88ms)
+    API Routes
+      Unauthenticated
+        POST /api/login - login admin user
+          ✔ should log user in with correct username/pass and redirect to / (68ms)
+          ✔ should redirect user to /admin/login?error=true with INCORRECT username
+          ✔ should redirect user to /admin/login?error=true with INCORRECT password (59ms)
+        GET /api/logout - logout admin user
+          ✔ should log user out and redirect to / (66ms)
+        POST /api/post/:postId/comment - add comment to post
+          ✔ should add comment to specific post
+          ✔ should add comment to specific post with Anonymous author if author omitted
+          ✔ should return 400 if no body is included
+        DELETE /api/post/:postId/comment/:id - delete comment from post
+          ✔ should redirect to login page
+        POST /api/post - new post
+          ✔ should redirect to login page
+        PUT /api/post/:id - edit post
+          ✔ should redirect to login page
+        DELETE /api/post/:id - delete post
+          ✔ should redirect to login page
+      Authenticated
+        DELETE /api/post/:postId/comment/:id - delete comment from post
+          ✔ should remove comment from post
+        POST /api/post - new post
+          ✔ should add post
+          ✔ should add tag ids to post if included
+          ✔ should return 400 if title not included
+          ✔ should return 400 if body not included
+        PUT /api/post/:id - edit post
+          ✔ should allow editing title
+          ✔ should allow editing body
+          ✔ should overwrite tags with new tags
+          ✔ should remove all tags if tags are omitted
+          ✔ should return 400 if body is omitted
+          ✔ should return 400 if title is omitted
+        DELETE /api/post/:id - delete post
+          ✔ should delete post
+
+
+  46 passing (1s)
+  6 failing
+
+  1) Mongo Blog
+       HTML Routes
+         Unauthenticated
+           GET /post/:slug - view post
+             should render all posts by slug:
+     Error: expected 200 "OK", got 500 "Internal Server Error"
+      at Context.<anonymous> (test/test.js:132:16)
+      at process.processImmediate (node:internal/timers:471:21)
+  ----
+      at Test._assertStatus (node_modules/supertest/lib/test.js:252:14)
+      at /Users/dominickbirge/Documents/mmc6278/assignment8/mmc6278-8-8-birge-dominick/node_modules/supertest/lib/test.js:308:13
+      at Test._assertFunction (node_modules/supertest/lib/test.js:285:13)
+      at Test.assert (node_modules/supertest/lib/test.js:164:23)
+      at Server.localAssert (node_modules/supertest/lib/test.js:120:14)
+      at Object.onceWrapper (node:events:627:28)
+      at Server.emit (node:events:513:28)
+      at emitCloseNT (node:net:2128:8)
+      at process.processTicksAndRejections (node:internal/process/task_queues:81:21)
+
+  2) Mongo Blog
+       HTML Routes
+         Unauthenticated
+           GET /post/:slug - view post
+             should render all post pages WITHOUT new post and logout links:
+     Error: expected 200 "OK", got 500 "Internal Server Error"
+      at Context.<anonymous> (test/test.js:146:16)
+      at process.processImmediate (node:internal/timers:471:21)
+  ----
+      at Test._assertStatus (node_modules/supertest/lib/test.js:252:14)
+      at /Users/dominickbirge/Documents/mmc6278/assignment8/mmc6278-8-8-birge-dominick/node_modules/supertest/lib/test.js:308:13
+      at Test._assertFunction (node_modules/supertest/lib/test.js:285:13)
+      at Test.assert (node_modules/supertest/lib/test.js:164:23)
+      at Server.localAssert (node_modules/supertest/lib/test.js:120:14)
+      at Object.onceWrapper (node:events:627:28)
+      at Server.emit (node:events:513:28)
+      at emitCloseNT (node:net:2128:8)
+      at process.processTicksAndRejections (node:internal/process/task_queues:81:21)
+
+  3) Mongo Blog
+       HTML Routes
+         Unauthenticated
+           GET /post/:slug - view post
+             should render all post comments:
+     Error: expected 200 "OK", got 500 "Internal Server Error"
+      at Context.<anonymous> (test/test.js:158:16)
+      at process.processImmediate (node:internal/timers:471:21)
+  ----
+      at Test._assertStatus (node_modules/supertest/lib/test.js:252:14)
+      at /Users/dominickbirge/Documents/mmc6278/assignment8/mmc6278-8-8-birge-dominick/node_modules/supertest/lib/test.js:308:13
+      at Test._assertFunction (node_modules/supertest/lib/test.js:285:13)
+      at Test.assert (node_modules/supertest/lib/test.js:164:23)
+      at Server.localAssert (node_modules/supertest/lib/test.js:120:14)
+      at Object.onceWrapper (node:events:627:28)
+      at Server.emit (node:events:513:28)
+      at emitCloseNT (node:net:2128:8)
+      at process.processTicksAndRejections (node:internal/process/task_queues:81:21)
+
+  4) Mongo Blog
+       HTML Routes
+         Unauthenticated
+           GET /post/:slug - view post
+             should render all post comments' author and date, format: 01/01/2000:
+     Error: expected 200 "OK", got 500 "Internal Server Error"
+      at Context.<anonymous> (test/test.js:172:16)
+      at process.processImmediate (node:internal/timers:471:21)
+  ----
+      at Test._assertStatus (node_modules/supertest/lib/test.js:252:14)
+      at /Users/dominickbirge/Documents/mmc6278/assignment8/mmc6278-8-8-birge-dominick/node_modules/supertest/lib/test.js:308:13
+      at Test._assertFunction (node_modules/supertest/lib/test.js:285:13)
+      at Test.assert (node_modules/supertest/lib/test.js:164:23)
+      at Server.localAssert (node_modules/supertest/lib/test.js:120:14)
+      at Object.onceWrapper (node:events:627:28)
+      at Server.emit (node:events:513:28)
+      at emitCloseNT (node:net:2128:8)
+      at process.processTicksAndRejections (node:internal/process/task_queues:81:21)
+
+  5) Mongo Blog
+       HTML Routes
+         Authenticated
+           GET /post/:slug - view post
+             should render all post pages with new post and logout links:
+     Error: expected 200 "OK", got 500 "Internal Server Error"
+      at Context.<anonymous> (test/test.js:312:16)
+      at process.processImmediate (node:internal/timers:471:21)
+  ----
+      at Test._assertStatus (node_modules/supertest/lib/test.js:252:14)
+      at /Users/dominickbirge/Documents/mmc6278/assignment8/mmc6278-8-8-birge-dominick/node_modules/supertest/lib/test.js:308:13
+      at Test._assertFunction (node_modules/supertest/lib/test.js:285:13)
+      at Test.assert (node_modules/supertest/lib/test.js:164:23)
+      at Server.localAssert (node_modules/supertest/lib/test.js:120:14)
+      at Object.onceWrapper (node:events:627:28)
+      at Server.emit (node:events:513:28)
+      at emitCloseNT (node:net:2128:8)
+      at process.processTicksAndRejections (node:internal/process/task_queues:81:21)
+
+  6) Mongo Blog
+       HTML Routes
+         Authenticated
+           GET /post/:slug - view post
+             should render all post comments with remove option:
+     Error: expected 200 "OK", got 500 "Internal Server Error"
+      at Context.<anonymous> (test/test.js:323:16)
+      at process.processImmediate (node:internal/timers:471:21)
+  ----
+      at Test._assertStatus (node_modules/supertest/lib/test.js:252:14)
+      at /Users/dominickbirge/Documents/mmc6278/assignment8/mmc6278-8-8-birge-dominick/node_modules/supertest/lib/test.js:308:13
+      at Test._assertFunction (node_modules/supertest/lib/test.js:285:13)
+      at Test.assert (node_modules/supertest/lib/test.js:164:23)
+      at Server.localAssert (node_modules/supertest/lib/test.js:120:14)
+      at Object.onceWrapper (node:events:627:28)
+      at Server.emit (node:events:513:28)
+      at emitCloseNT (node:net:2128:8)
+      at process.processTicksAndRejections (node:internal/process/task_queues:81:21)
+
+
+

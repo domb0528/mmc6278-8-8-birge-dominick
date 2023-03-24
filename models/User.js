@@ -5,6 +5,16 @@ const UserSchema = new Schema({
 // Create a username property of type String that is required
 // Create a password property of type String that is required
 // with minimum length of 5 and max length 20
+username: {
+  type: String,
+  required: true
+},
+password: {
+  type: String,
+  required: true,
+  minLength: 5,
+  maxLength: 20
+}
 })
 
 // hashes the password before it's stored in mongo
