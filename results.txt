@@ -23,7 +23,7 @@ mongo-sandbox
 > mongo_blog@1.0.0 mongo:start
 > export DB_NAME=mongo_blog && docker run --rm -d -p 27017:27017 --name=mongo-sandbox -e MONGO_INITDB_DATABASE=$DB_NAME mongo:5
 
-90d604994ab3e6c167024911835c1d12d9f666c296e66b2b4770eeea3bd7009c
+b42ff7150b31190a7046a980fe010225ccf2f6adc0adebdadade361ca083243b
 WAITING FOR MONGO TO START
 WAITING 1 SEC
 
@@ -45,7 +45,7 @@ WAITING 1 SEC
     HTML Routes
       Unauthenticated
         GET / - index page showing all posts
-          ✔ should NOT render new post and logout links (92ms)
+          ✔ should NOT render new post and logout links (90ms)
           ✔ should render all post titles as links to post
           ✔ should render dates of posts, format: Thu, Oct 26, 2000
         GET /?tag={tag} - index page showing all posts by tag
@@ -84,17 +84,17 @@ WAITING 1 SEC
         GET /admin/create-post - new post page
           ✔ should render create post page
         GET /admin/edit-post/:slug - edit post page
-          ✔ should render edit post page for each post with pre-filled title (85ms)
-          ✔ should render edit post page for each post with pre-filled body (72ms)
-          ✔ should render edit post page for each post with pre-filled tags (88ms)
+          ✔ should render edit post page for each post with pre-filled title (90ms)
+          ✔ should render edit post page for each post with pre-filled body (81ms)
+          ✔ should render edit post page for each post with pre-filled tags (75ms)
     API Routes
       Unauthenticated
         POST /api/login - login admin user
-          ✔ should log user in with correct username/pass and redirect to / (68ms)
+          ✔ should log user in with correct username/pass and redirect to / (71ms)
           ✔ should redirect user to /admin/login?error=true with INCORRECT username
-          ✔ should redirect user to /admin/login?error=true with INCORRECT password (59ms)
+          ✔ should redirect user to /admin/login?error=true with INCORRECT password (62ms)
         GET /api/logout - logout admin user
-          ✔ should log user out and redirect to / (66ms)
+          ✔ should log user out and redirect to / (70ms)
         POST /api/post/:postId/comment - add comment to post
           ✔ should add comment to specific post
           ✔ should add comment to specific post with Anonymous author if author omitted
